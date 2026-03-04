@@ -1,0 +1,14 @@
+{
+  "name": "projeto-vania",
+  "private": true,
+  "scripts": {
+    "up": "docker compose up -d --build",
+    "up:logs": "docker compose up --build",
+    "down": "docker compose down",
+    "build": "docker compose build",
+    "postgres": "docker compose up -d postgres",
+    "build:api": "cd api-vania && npm ci && npm run build",
+    "build:frontend": "cd sistema-vania && npm ci && npm run build",
+    "build:all": "npm run build:api && npm run build:frontend"
+  }
+}

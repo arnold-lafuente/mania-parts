@@ -1,0 +1,53 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: vania_dev
+      POSTGRES_PASSWORD: vania_dev
+      POSTGRES_DB: vania_dev
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U vania_dev -d vania_dev"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./api-vania
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./api-vania/.env
+    environment:
+      - ENV=dev
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USERNAME=vania_dev
+      - DB_PASSWORD=vania_dev
+      - DB_NAME=vania_dev
+      - DB_SCHEMA=public
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+
+  sistema:
+    build:
+      context: ./sistema-vania
+      dockerfile: Dockerfile
+      args:
+        VITE_API_URL: http://localhost:3000
+        VITE_ENV: dev
+    ports:
+      - "80:80"
+    depends_on:
+      - api
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
