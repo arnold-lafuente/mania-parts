@@ -15,7 +15,6 @@ services:
     rootDir: api-vania
     buildCommand: npm install && npm run build
     startCommand: npm start
-    plan: free
     envVars:
       - key: NODE_ENV
         value: production
@@ -33,7 +32,6 @@ services:
     rootDir: sistema-vania
     buildCommand: npm install && npm run build
     staticPublishPath: dist
-    plan: free
     envVars:
       # URL de la API (Render la rellena si existe el servicio api-vania)
       - key: VITE_API_URL
